@@ -16,7 +16,8 @@ class WaitTimes
 
   attr_reader :service_type,
     :first_bus_number, :first_bus_dir, :first_bus_pick_up_stop_id, :first_bus_drop_off_stop_id,
-    :second_bus_number, :second_bus_dir, :second_bus_pick_up_stop_id, :second_bus_drop_off_stop_id
+    :second_bus_number, :second_bus_dir, :second_bus_pick_up_stop_id, :second_bus_drop_off_stop_id,
+    :results
 
   def initialize(svc_type:,
                  bus_num_1st:, dir_1st:, pick_up_1st:, drop_off_1st:,
@@ -31,6 +32,7 @@ class WaitTimes
     @second_bus_dir              = dir_2nd
     @second_bus_pick_up_stop_id  = pick_up_2nd
     @second_bus_drop_off_stop_id = drop_off_2nd
+    @results                     = []
   end
 
   def call
@@ -42,6 +44,8 @@ class WaitTimes
 
     puts _create_heading
     find_wait_times(first_bus, first_bus_drop_off_stop_id, second_bus, second_bus_pick_up_stop_id)
+
+    print_results
   end
 
   def create_bus_hash(route_id, service_id, direction_id)
@@ -109,13 +113,18 @@ class WaitTimes
         next if bus_2[pick_up] < bus_1[drop_off]
         minute_diff = _minute_difference(bus2_pick_up: bus_2[pick_up], bus1_drop_off: bus_1[drop_off])
         if _within_desired_wait_time?(minute_diff)
-          puts "#{minute_diff.to_i.to_s.rjust(2, ' ')} min wait : #{_print_times(bus_1)} then #{_print_times(bus_2)}"
+          results << "#{minute_diff.to_i.to_s.rjust(2, ' ')} min wait : #{_print_times(bus_1)} then #{_print_times(bus_2)}"
           break
         end
       }
     }
   end
 
+  def print_results
+    results.each {|result|
+      puts result
+    }
+  end
 
   def _create_utc_stop_time(stop_time)
     stop_time = stop_time.split(':')
