@@ -1,4 +1,5 @@
 require './wait_times'
+require './segment'
 
 ##to_school_premium
 #wt1 = WaitTimes.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
@@ -17,9 +18,22 @@ require './wait_times'
 #wt2.call
 
 #to_school_local
-wt3 = WaitTimes.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
-                   bus_num_1st: '1', dir_1st: Constants::OUTBOUND, pick_up_1st: '4029', drop_off_1st: '524',
-                   bus_num_2nd: '331', dir_2nd: Constants::OUTBOUND, pick_up_2nd: '5674', drop_off_2nd: '3360'
+seg1 = Segment.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
+                   bus_number: '1',
+                   bus_dir: Constants::OUTBOUND,
+                   pick_up_id: '4029',
+                   drop_off_id: '524'
                   )
+seg1.call
+
+seg2 = Segment.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
+                   bus_number: '331',
+                   bus_dir: Constants::OUTBOUND,
+                   pick_up_id: '5674',
+                   drop_off_id: '3360'
+                  )
+seg2.call
+
+wt3 = WaitTimes.new(segments_array: [seg1, seg2])
 puts "From SOCO (StopID 4029) to Ann Richards School (StopID 3360) using local only"
 wt3.call
