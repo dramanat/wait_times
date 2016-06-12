@@ -18,7 +18,7 @@ Bus times are printed when :
 - (second_bus[trip_id][pick_up_stop_id] - first_bus[trip_id][drop_off_stop_id]) <= 15 minutes
 
 #### Example
-call_wait_times.rb can be used to find bus times with 5-15 minutes wait for :
+call_wait_times.rb used to find bus times with 5-15 minutes wait for :
 - Bus #1 Southbound pick_up_stop_id 4029 and drop_off_stop_id 524, then
 - Bus #331 Westbound pick_up_stop_id 5674 and drop_off_stop_id 3360
 
