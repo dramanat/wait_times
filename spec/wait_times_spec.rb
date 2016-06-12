@@ -25,7 +25,7 @@ describe "wait_times"do
   context "less than 2 segments received" do
     it "should fail with number of segments messsage" do
       wt2 = WaitTimes.new(segments_array: [@seg1])
-      expect{wt2.call}.to raise_error(RuntimeError)
+      expect{wt2.find_and_print}.to raise_error(RuntimeError)
     end
   end
 

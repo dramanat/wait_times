@@ -14,7 +14,7 @@ class Segment
     @bus_hash         = {}
   end
 
-  def call
+  def set_up_bus_hash
     create_bus_hash
     populate_bus_hash
   end

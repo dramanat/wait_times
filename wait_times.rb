@@ -24,7 +24,7 @@ class WaitTimes
     @results                     = []
   end
 
-  def call
+  def find_and_print
 
     fail "invalid number of segments" if segments.length != 2
 
