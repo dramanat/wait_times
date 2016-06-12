@@ -72,6 +72,7 @@ class Segment
     nil
   end
 
+  private
   def _create_utc_stop_time(stop_time)
     stop_time = stop_time.split(':')
     if stop_time[0].to_i >= 24

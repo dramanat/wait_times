@@ -20,7 +20,7 @@ describe "segment" do
         @seg1.bus_hash[2] = {}
         @seg1.bus_hash[3] = {}
         @seg1.bus_hash[4] = {}
-        result = @seg1._line_we_seek?(
+        result = @seg1.send(:_line_we_seek?,
           trip_id: 5,
           stop_id: '72',
         )
@@ -35,7 +35,7 @@ describe "segment" do
         @seg1.bus_hash[2] = {}
         @seg1.bus_hash[3] = {}
         @seg1.bus_hash[4] = {}
-        result = @seg1._line_we_seek?(
+        result = @seg1.send(:_line_we_seek?,
           trip_id: 4,
           stop_id: '72',
         )
@@ -51,7 +51,7 @@ describe "segment" do
         @seg1.bus_hash[2] = {}
         @seg1.bus_hash[3] = {}
         @seg1.bus_hash[4] = {}
-        result = @seg1._line_we_seek?(
+        result = @seg1.send(:_line_we_seek?,
           trip_id: 4,
           stop_id: '4029',
         )
@@ -67,7 +67,7 @@ describe "segment" do
     context "hour is greater than 24" do
       it "increments day and subtracts 24 from hour" do
         stop_time = '25:10'
-        utc       = @seg1._create_utc_stop_time(stop_time)
+        utc       = @seg1.send(:_create_utc_stop_time, stop_time)
         utc.day.should eql Constants::DAY + 1
         utc.hour.should eql 1
       end
@@ -76,7 +76,7 @@ describe "segment" do
     context "hour is less than 24" do
       it "day is unaffected" do
         stop_time = "23:10"
-        utc       = @seg1._create_utc_stop_time(stop_time)
+        utc       = @seg1.send(:_create_utc_stop_time, stop_time)
         utc.day.should eql Constants::DAY
         utc.hour.should eql 23
       end
@@ -85,7 +85,7 @@ describe "segment" do
     context "hour is less than 12" do
       it "day is unaffected" do
         stop_time = "3:10"
-        utc       = @seg1._create_utc_stop_time(stop_time)
+        utc       = @seg1.send(:_create_utc_stop_time, stop_time)
         utc.day.should eql Constants::DAY
         utc.hour.should eql 3
       end

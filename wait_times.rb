@@ -54,6 +54,7 @@ class WaitTimes
     }
   end
 
+  private
   def _extract_time(date_time)
     rjustified_min = date_time.min.to_s.rjust(2, '0')
     hour_in_standard_time = if date_time.hour < 12
