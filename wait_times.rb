@@ -35,8 +35,8 @@ class WaitTimes
   end
 
   def find_wait_times
-    segments[0].bus_hash.each {|bus_1_key, bus_1|
-      segments[1].bus_hash.each {|bus_2_key, bus_2|
+    segments[0].bus_hash.each do |bus_1_key, bus_1|
+      segments[1].bus_hash.each do |bus_2_key, bus_2|
         next if bus_2[segments[1].pick_up_stop_id] < bus_1[segments[0].drop_off_stop_id]
         minute_diff = _minute_difference(start_time: bus_2[segments[1].pick_up_stop_id],
                                          end_time: bus_1[segments[0].drop_off_stop_id])
@@ -44,8 +44,8 @@ class WaitTimes
           results << "#{minute_diff.to_i.to_s.rjust(2, ' ')} min wait : #{_print_times(bus_1)} then #{_print_times(bus_2)}"
           break
         end
-      }
-    }
+      end
+    end
   end
 
   def print_results
@@ -76,10 +76,10 @@ class WaitTimes
   def _print_times(times_hash)
     fail 'invalid times_hash' if times_hash.length != 2
     times_str = ""
-    times_hash.each_with_index{ |(k, v), idx|
+    times_hash.each_with_index do |(k, v), idx|
       times_str << " -> " if idx == 1
       times_str << _extract_time(v)
-    }
+    end
     times_str
   end
 

@@ -43,7 +43,7 @@ class Segment
     invalid_drop_off_id = true
     stop_times_file = File.new('stop_times.txt')
 
-    stop_times_file.each {|line|
+    stop_times_file.each do |line|
       stop_info      = line.split(',')
       line_trip_id   = stop_info[0]
       line_stop_time = stop_info[1]
@@ -64,7 +64,7 @@ class Segment
         end
 
       end
-    }
+    end
 
     fail "invalid pick up stop id"  if invalid_pick_up_id
     fail "invalid drop off stop id" if invalid_drop_off_id
