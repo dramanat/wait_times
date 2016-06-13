@@ -36,7 +36,6 @@ class Segment
     }
 
     fail "invalid input" if invalid_input
-    bus_hash
   end
 
   def populate_bus_hash
@@ -69,7 +68,6 @@ class Segment
 
     fail "invalid pick up stop id"  if invalid_pick_up_id
     fail "invalid drop off stop id" if invalid_drop_off_id
-    nil
   end
 
   private
