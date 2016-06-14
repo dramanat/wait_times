@@ -1,7 +1,7 @@
 #### Purpose
-Use CapitalMetro's GTFS data to find bus times that require only 5-15 minutes to wait for a connection.
+Make your bus commute easier!  Find routes that require only 5-15 minutes of wait time between transfers.  (Only works for trips with just one transfer.)
 
-Note: this program can only handle 1 bus transfer (2 buses total).
+This program can be used by any public transit system who publish their transit data in GTFS (General Transit Feed Specification) format.
 
 #### Explanation of code
 This program uses the following GTFS data files:
@@ -25,7 +25,9 @@ call_wait_times.rb finds bus times with 5-15 minutes wait for :
 [Output from call_wait_times.rb](https://docs.google.com/document/d/1NQLsBa4vuWFes-3ExZfdz8wI9Hxz2UjeOri6NMGopRQ/edit?usp=sharing)
 
 #### How to use program
-1. need to have trips.txt & stop_times.txt in wait_times directory (can be downloaded from http://www.capmetro.org/gisdata/google_transit.zip)
+1. need to have trips.txt & stop_times.txt in wait_times directory 
+  1. Austin's Capital Metro GTFS feed can be downloaded from http://www.capmetro.org/gisdata/google_transit.zip
+  2. GTFS feeds for other cities can be found at https://code.google.com/archive/p/googletransitdatafeed/wikis/PublicFeeds.wiki
 
 2. need to know bus information (bus #, stop_ids, direction, etc.)
 
@@ -35,7 +37,7 @@ call_wait_times.rb finds bus times with 5-15 minutes wait for :
   3. execute WaitTimes' call method
 
 #### Items to work on
-- [ ] create test for #find_wait_times
+- [X] create test for #find_wait_times
 - [ ] improve performance of #find_wait_times
 - [ ] replace file processing with smarter_csv gem (file extensions need to be changed to CSV)
 - [ ] create test files in spec directory and write tests for #create_bus_hash and #populate_bus_hash
