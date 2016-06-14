@@ -11,6 +11,18 @@ describe "wait_times"do
                        pick_up_id: '4029',
                        drop_off_id: '524'
                       )
+    @seg1.bus_hash[1] = {}
+    @seg1.bus_hash[2] = {}
+    @seg1.bus_hash[3] = {}
+    @seg1.bus_hash[4] = {}
+    @seg1.bus_hash[1]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17)
+    @seg1.bus_hash[1]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 5)
+    @seg1.bus_hash[2]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 18)
+    @seg1.bus_hash[2]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 18, 5)
+    @seg1.bus_hash[3]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19)
+    @seg1.bus_hash[3]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19, 35)
+    @seg1.bus_hash[4]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20)
+    @seg1.bus_hash[4]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 5)
 
     @seg2 = Segment.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
                        bus_number: '331',
@@ -18,6 +30,18 @@ describe "wait_times"do
                        pick_up_id: '5674',
                        drop_off_id: '3360'
                       )
+    @seg2.bus_hash[5] = {}
+    @seg2.bus_hash[6] = {}
+    @seg2.bus_hash[7] = {}
+    @seg2.bus_hash[8] = {}
+    @seg2.bus_hash[5]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 30)
+    @seg2.bus_hash[5]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 35)
+    @seg2.bus_hash[6]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 18, 12)
+    @seg2.bus_hash[6]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 18, 17)
+    @seg2.bus_hash[7]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19, 45)
+    @seg2.bus_hash[7]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19, 50)
+    @seg2.bus_hash[8]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 9)
+    @seg2.bus_hash[8]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 14)
 
     @wt = WaitTimes.new(segments_array: [@seg1, @seg2])
   }
@@ -26,6 +50,15 @@ describe "wait_times"do
     it "should fail with number of segments messsage" do
       wt2 = WaitTimes.new(segments_array: [@seg1])
       expect{wt2.find_and_print}.to raise_error(RuntimeError)
+    end
+  end
+
+  context "#find_wait_times" do
+    it "should have 2 items in results array" do
+
+      @wt.find_wait_times
+      @wt.results.length.should == 2
+
     end
   end
 
