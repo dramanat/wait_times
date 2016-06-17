@@ -25,14 +25,13 @@ class WaitTimes
   end
 
   def find_and_print
-
-    fail "invalid number of segments" if segments.length != 2
-
-    find_wait_times
-    puts _create_heading
-    print_results
-
+    if _valid_input?
+      find_wait_times
+      puts _create_heading
+      print_results
+    end
   end
+
 
   def find_wait_times
     segments[0].bus_hash.each do |bus_1_key, bus_1|
@@ -55,6 +54,21 @@ class WaitTimes
   end
 
   private
+
+  def _valid_input?
+    fail "invalid number of segments" if segments.length != 2
+
+    if segments[0].service_type != segments[1].service_type
+      fail "segments need to have same service type"
+    end
+
+    if segments[0].bus_num == segments[1].bus_num
+      fail "segments should have different bus numbers"
+    end
+
+    true
+  end
+
   def _extract_time(date_time)
     rjustified_min = date_time.min.to_s.rjust(2, '0')
     hour_in_standard_time = if date_time.hour < 12

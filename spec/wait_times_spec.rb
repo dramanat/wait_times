@@ -46,11 +46,41 @@ describe "wait_times"do
     @wt = WaitTimes.new(segments_array: [@seg1, @seg2])
   }
 
-  context "less than 2 segments received" do
-    it "should fail with number of segments messsage" do
-      wt2 = WaitTimes.new(segments_array: [@seg1])
-      expect{wt2.find_and_print}.to raise_error(RuntimeError)
+  context "#_valid_input?" do
+
+    context "less than 2 segments received" do
+      it "should fail" do
+        wt2 = WaitTimes.new(segments_array: [@seg1])
+        expect{wt2.send(:_valid_input?)}.to raise_error(RuntimeError)
+      end
     end
+
+    context "2 segments received with different service types" do
+      it "should fail" do
+        seg3 = Segment.new(svc_type: Constants::SATURDAY_SERVICE_ID,
+                           bus_number: '1',
+                           bus_dir: Constants::OUTBOUND,
+                           pick_up_id: '4029',
+                           drop_off_id: '524'
+                          )
+        wt2 = WaitTimes.new(segments_array: [seg3, @seg2])
+        expect{wt2.send(:_valid_input?)}.to raise_error(RuntimeError)
+      end
+    end
+
+    context "2 segments received with same bus number" do
+      it "should fail" do
+        seg3 = Segment.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
+                           bus_number: '331',
+                           bus_dir: Constants::OUTBOUND,
+                           pick_up_id: '4029',
+                           drop_off_id: '524'
+                          )
+        wt2 = WaitTimes.new(segments_array: [seg3, @seg2])
+        expect{wt2.send(:_valid_input?)}.to raise_error(RuntimeError)
+      end
+    end
+
   end
 
   context "#find_wait_times" do
