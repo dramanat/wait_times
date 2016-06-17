@@ -26,14 +26,15 @@ class WaitTimes
 
   def find_and_print
     if _valid_input?
-      find_wait_times
+      _find_wait_times
       puts _create_heading
-      print_results
+      _print_results
     end
   end
 
+  private
 
-  def find_wait_times
+  def _find_wait_times
     segments[0].bus_hash.each do |bus_1_key, bus_1|
       segments[1].bus_hash.each do |bus_2_key, bus_2|
         next if bus_2[segments[1].pick_up_stop_id] < bus_1[segments[0].drop_off_stop_id]
@@ -47,13 +48,11 @@ class WaitTimes
     end
   end
 
-  def print_results
+  def _print_results
     results.each {|result|
       puts result
     }
   end
-
-  private
 
   def _valid_input?
     fail "invalid number of segments" if segments.length != 2

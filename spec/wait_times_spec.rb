@@ -83,10 +83,10 @@ describe "wait_times"do
 
   end
 
-  context "#find_wait_times" do
+  context "#_find_wait_times" do
     it "should have 2 items in results array" do
 
-      @wt.find_wait_times
+      @wt.send(:_find_wait_times)
       @wt.results.length.should == 2
 
     end
