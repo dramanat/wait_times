@@ -15,7 +15,7 @@ The following data structure is created :
 - second_bus[trip_id][drop_off_stop_id] = time_at_stop
 
 Bus times are printed when :
-- (second_bus[trip_id][pick_up_stop_id] - first_bus[trip_id][drop_off_stop_id]) <= 15 minutes
+- (second_bus[trip_id][pick_up_stop_id] - first_bus[trip_id][drop_off_stop_id]) is less than 5 OR greater than 15 minutes 
 
 #### Example
 call_wait_times.rb finds bus times with 5-15 minutes wait for :
