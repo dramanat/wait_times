@@ -1,7 +1,7 @@
 #### Purpose
 Make your bus commute easier!  Find routes that require only 5-15 minutes of wait time between transfers.  (Only works for trips with just one transfer.)
 
-This program can be used by any public transit system who publish their transit data in GTFS (General Transit Feed Specification) format.
+This program can be used by any public transit system that publishes their transit data in GTFS (General Transit Feed Specification) format.
 
 #### Explanation of code
 This program uses the following GTFS data files:
@@ -34,7 +34,7 @@ call_wait_times.rb finds bus times with 5-15 minutes wait for :
 3. to print results, use call_wait_times.rb as an example to
   1. set up 2 Segment objects
   2. create WaitTimes object with Segment objects passed in as an array
-  3. execute WaitTimes' call method
+  3. execute WaitTimes' find_and_print method
 
 #### Items to work on
 - [X] create test for #find_wait_times
