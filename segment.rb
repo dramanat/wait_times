@@ -74,7 +74,8 @@ class Segment
   def _create_utc_stop_time(stop_time)
     stop_time = stop_time.split(':')
     if stop_time[0].to_i >= 24
-      utc_stop_time = Time.utc(YEAR, MONTH, DAY + 1, (stop_time[0].to_i - 24).to_s, stop_time[1])
+      tomorrow = Time.now + (24 * 60 * 60 )
+      utc_stop_time = Time.utc(tomorrow.year, tomorrow.month, tomorrow.day, (stop_time[0].to_i - 24).to_s, stop_time[1])
     else
       utc_stop_time = Time.utc(YEAR, MONTH, DAY, stop_time[0], stop_time[1])
     end

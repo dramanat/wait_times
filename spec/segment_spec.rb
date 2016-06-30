@@ -68,7 +68,8 @@ describe "segment" do
       it "increments day and subtracts 24 from hour" do
         stop_time = '25:10'
         utc       = @seg1.send(:_create_utc_stop_time, stop_time)
-        utc.day.should eql Constants::DAY + 1
+        tomorrow = Time.now + (24 * 60 * 60 )
+        utc.day.should eql tomorrow.day
         utc.hour.should eql 1
       end
     end
