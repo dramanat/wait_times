@@ -1,4 +1,5 @@
 require 'pry'
+require 'benchmark'
 
 module Constants
   WEEKDAY_SERVICE_ID  = '1'
@@ -17,16 +18,25 @@ end
 class WaitTimes
   include Constants
 
-  attr_reader :segments, :results
+  attr_reader :segments, :results, :benchmark_required
 
-  def initialize(segments_array:)
+  def initialize(segments_array:, want_benchmark:)
     @segments                    = segments_array
     @results                     = []
+    @benchmark_required          = want_benchmark
   end
 
   def find_and_print
     if _valid_input?
-      _find_wait_times
+      if benchmark_required
+        Benchmark.bm(15) do |bench|
+          bench.report('benchmark:') do
+            _find_wait_times
+          end
+        end
+      else
+        _find_wait_times
+      end
       puts _create_heading
       _print_results
     end
@@ -44,8 +54,8 @@ class WaitTimes
           results << "#{minute_diff.to_i.to_s.rjust(2, ' ')} min wait : #{_print_times(bus_1)} then #{_print_times(bus_2)}"
           break
         end
-      end
-    end
+      end #segments[1] iteration
+    end #segments[0] iteration
   end
 
   def _print_results

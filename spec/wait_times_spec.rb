@@ -43,14 +43,14 @@ describe "wait_times"do
     @seg2.bus_hash[8]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 9)
     @seg2.bus_hash[8]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 14)
 
-    @wt = WaitTimes.new(segments_array: [@seg1, @seg2])
+    @wt = WaitTimes.new(segments_array: [@seg1, @seg2], want_benchmark: false)
   }
 
   context "#_valid_input?" do
 
     context "less than 2 segments received" do
       it "should fail" do
-        wt2 = WaitTimes.new(segments_array: [@seg1])
+        wt2 = WaitTimes.new(segments_array: [@seg1], want_benchmark: false)
         expect{wt2.send(:_valid_input?)}.to raise_error(RuntimeError)
       end
     end
@@ -63,7 +63,7 @@ describe "wait_times"do
                            pick_up_id: '4029',
                            drop_off_id: '524'
                           )
-        wt2 = WaitTimes.new(segments_array: [seg3, @seg2])
+        wt2 = WaitTimes.new(segments_array: [seg3, @seg2], want_benchmark: false)
         expect{wt2.send(:_valid_input?)}.to raise_error(RuntimeError)
       end
     end
@@ -76,7 +76,7 @@ describe "wait_times"do
                            pick_up_id: '4029',
                            drop_off_id: '524'
                           )
-        wt2 = WaitTimes.new(segments_array: [seg3, @seg2])
+        wt2 = WaitTimes.new(segments_array: [seg3, @seg2], want_benchmark: false)
         expect{wt2.send(:_valid_input?)}.to raise_error(RuntimeError)
       end
     end
@@ -225,7 +225,7 @@ describe "wait_times"do
                            pick_up_id: '4029',
                            drop_off_id: '4444'
                           )
-        wt2 = WaitTimes.new(segments_array: [seg3, @seg2])
+        wt2 = WaitTimes.new(segments_array: [seg3, @seg2], want_benchmark: false)
         output      = wt2.send(:_create_heading)
         output.should == "              4029    -> 4444          5674   -> 3360"
       end
