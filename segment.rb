@@ -4,6 +4,7 @@ class Segment
   include Constants
 
   attr_reader :service_type, :bus_num, :dir, :pick_up_stop_id, :drop_off_stop_id, :bus_hash
+  attr_accessor :pick_up_times, :drop_off_times
 
   def initialize(svc_type:, bus_number:, bus_dir:, pick_up_id:, drop_off_id:)
     @service_type     = svc_type
@@ -12,11 +13,14 @@ class Segment
     @pick_up_stop_id  = pick_up_id
     @drop_off_stop_id = drop_off_id
     @bus_hash         = {}
+    @pick_up_times    = []
+    @drop_off_times   = []
   end
 
   def set_up_bus_hash
     create_bus_hash
     populate_bus_hash
+    populate_times_arrays
   end
 
   def create_bus_hash
@@ -68,6 +72,13 @@ class Segment
 
     fail "invalid pick up stop id"  if invalid_pick_up_id
     fail "invalid drop off stop id" if invalid_drop_off_id
+  end
+
+  def populate_times_arrays
+    bus_hash.each do |trip_id_key, times_hash|
+      pick_up_times  << times_hash[pick_up_stop_id]
+      drop_off_times << times_hash[drop_off_stop_id]
+    end
   end
 
   private

@@ -45,17 +45,42 @@ class WaitTimes
   private
 
   def _find_wait_times
-    segments[0].bus_hash.each do |bus_1_key, bus_1|
-      segments[1].bus_hash.each do |bus_2_key, bus_2|
-        next if bus_2[segments[1].pick_up_stop_id] < bus_1[segments[0].drop_off_stop_id]
-        minute_diff = _minute_difference(start_time: bus_2[segments[1].pick_up_stop_id],
-                                         end_time: bus_1[segments[0].drop_off_stop_id])
-        if _within_desired_wait_time?(minute_diff)
-          results << "#{minute_diff.to_i.to_s.rjust(2, ' ')} min wait : #{_print_times(bus_1)} then #{_print_times(bus_2)}"
-          break
-        end
-      end #segments[1] iteration
-    end #segments[0] iteration
+    segments[0].drop_off_times.each_index do |drop_off_idx|
+      binary_search(drop_off_idx)
+    end
+  end
+
+  def binary_search(drop_off_idx)
+    drop_off_time = segments[0].drop_off_times[drop_off_idx]
+    low_index     = 0
+    high_index    = segments[1].pick_up_times.length - 1
+
+    while (low_index <= high_index)
+
+      middle_index = (high_index + low_index) / 2
+      minute_diff  = _minute_difference(start_time: segments[1].pick_up_times[middle_index],
+                                       end_time: drop_off_time)
+
+      if _within_desired_wait_time?(minute_diff)
+        #match found!
+        _add_to_results(min_diff: minute_diff, drop_off_idx: drop_off_idx, pick_up_idx: middle_index)
+        low_index = high_index + 1
+      elsif segments[1].pick_up_times[middle_index] < drop_off_time
+        #process right side
+        low_index = middle_index + 1
+      else #segments[1].pick_up_times[middle_index] > drop_off_time
+        #process left side
+        high_index = middle_index - 1
+      end
+
+    end
+  end
+
+  def _add_to_results(min_diff:, drop_off_idx:, pick_up_idx:)
+    formatted_min_diff = min_diff.to_i.to_s.rjust(2, ' ')
+    bus_1_times        = _print_times(seg_idx: 0, times_idx: drop_off_idx)
+    bus_2_times        = _print_times(seg_idx: 1, times_idx: pick_up_idx)
+    results << "#{formatted_min_diff} min wait : #{bus_1_times} then #{bus_2_times}"
   end
 
   def _print_results
@@ -96,14 +121,10 @@ class WaitTimes
     (start_time - end_time) / 60
   end
 
-  def _print_times(times_hash)
-    fail 'invalid times_hash' if times_hash.length != 2
-    times_str = ""
-    times_hash.each_with_index do |(k, v), idx|
-      times_str << " -> " if idx == 1
-      times_str << _extract_time(v)
-    end
-    times_str
+  def _print_times(seg_idx:, times_idx:)
+    times_str = _extract_time(segments[seg_idx].pick_up_times[times_idx])
+    times_str << " -> "
+    times_str << _extract_time(segments[seg_idx].drop_off_times[times_idx])
   end
 
   def _within_desired_wait_time?(minute_diff)

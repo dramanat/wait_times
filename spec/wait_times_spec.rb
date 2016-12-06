@@ -23,6 +23,16 @@ describe "wait_times"do
     @seg1.bus_hash[3]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19, 35)
     @seg1.bus_hash[4]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20)
     @seg1.bus_hash[4]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 5)
+    @seg1.pick_up_times = []
+    @seg1.pick_up_times << @seg1.bus_hash[1]['4029']
+    @seg1.pick_up_times << @seg1.bus_hash[2]['4029']
+    @seg1.pick_up_times << @seg1.bus_hash[3]['4029']
+    @seg1.pick_up_times << @seg1.bus_hash[4]['4029']
+    @seg1.drop_off_times = []
+    @seg1.drop_off_times << @seg1.bus_hash[1]['524']
+    @seg1.drop_off_times << @seg1.bus_hash[2]['524']
+    @seg1.drop_off_times << @seg1.bus_hash[3]['524']
+    @seg1.drop_off_times << @seg1.bus_hash[4]['524']
 
     @seg2 = Segment.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
                        bus_number: '331',
@@ -42,6 +52,16 @@ describe "wait_times"do
     @seg2.bus_hash[7]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19, 50)
     @seg2.bus_hash[8]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 9)
     @seg2.bus_hash[8]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 14)
+    @seg2.pick_up_times = []
+    @seg2.pick_up_times << @seg2.bus_hash[5]['5674']
+    @seg2.pick_up_times << @seg2.bus_hash[6]['5674']
+    @seg2.pick_up_times << @seg2.bus_hash[7]['5674']
+    @seg2.pick_up_times << @seg2.bus_hash[8]['5674']
+    @seg2.drop_off_times = []
+    @seg2.drop_off_times << @seg2.bus_hash[5]['3360']
+    @seg2.drop_off_times << @seg2.bus_hash[6]['3360']
+    @seg2.drop_off_times << @seg2.bus_hash[7]['3360']
+    @seg2.drop_off_times << @seg2.bus_hash[8]['3360']
 
     @wt = WaitTimes.new(segments_array: [@seg1, @seg2], want_benchmark: false)
   }
@@ -162,31 +182,12 @@ describe "wait_times"do
   context "#_print_times" do
     context "valid number of items in times_hash" do
       it "should output in format : pick-up-time -> drop-off-time" do
-        times_hash     = {}
-        pick_up_time   = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 45)
-        drop_off_time  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 55)
-        times_hash['pick_up_stop_id']  = pick_up_time
-        times_hash['drop_off_stop_id'] = drop_off_time
 
-        expect{@wt.send(:_print_times, times_hash)}.not_to raise_error
-        output         = @wt.send(:_print_times, times_hash)
-        output.should eql "05:45pm -> 05:55pm"
+        expect{@wt.send(:_print_times, seg_idx: 0, times_idx: 2)}.not_to raise_error
+        output         = @wt.send(:_print_times, seg_idx: 0, times_idx: 2)
+        output.should eql "07:00pm -> 07:35pm"
       end
     end
-
-    context "invalid number of items in times_hash" do
-      it "should fail with error message" do
-        times_hash        = {}
-        pick_up_time      = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 45)
-        drop_off_time     = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 55)
-        unnecessary_time  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 22, 55)
-        times_hash['pick_up_stop_id']     = pick_up_time
-        times_hash['drop_off_stop_id']    = drop_off_time
-        times_hash['unnecessary_stop_id'] = unnecessary_time
-        expect{@wt.send(:_print_times, times_hash)}.to raise_error(RuntimeError)
-      end
-    end
-
   end
 
   context "#_within_desired_wait_time?" do
