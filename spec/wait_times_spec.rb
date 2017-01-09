@@ -24,6 +24,11 @@ describe "wait_times"do
     @seg1.bus_hash[4]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20)
     @seg1.bus_hash[4]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 5)
 
+    @seg1.trip_ids << 1
+    @seg1.trip_ids << 2
+    @seg1.trip_ids << 3
+    @seg1.trip_ids << 4
+
     @seg2 = Segment.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
                        bus_number: '331',
                        bus_dir: Constants::OUTBOUND,
@@ -42,6 +47,11 @@ describe "wait_times"do
     @seg2.bus_hash[7]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19, 50)
     @seg2.bus_hash[8]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 9)
     @seg2.bus_hash[8]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 14)
+
+    @seg2.trip_ids << 5
+    @seg2.trip_ids << 6
+    @seg2.trip_ids << 7
+    @seg2.trip_ids << 8
 
     @wt = WaitTimes.new(segments_array: [@seg1, @seg2], want_benchmark: false)
   }

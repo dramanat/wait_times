@@ -45,17 +45,36 @@ class WaitTimes
   private
 
   def _find_wait_times
-    segments[0].bus_hash.each do |bus_1_key, bus_1|
-      segments[1].bus_hash.each do |bus_2_key, bus_2|
-        next if bus_2[segments[1].pick_up_stop_id] < bus_1[segments[0].drop_off_stop_id]
-        minute_diff = _minute_difference(start_time: bus_2[segments[1].pick_up_stop_id],
-                                         end_time: bus_1[segments[0].drop_off_stop_id])
-        if _within_desired_wait_time?(minute_diff)
-          results << "#{minute_diff.to_i.to_s.rjust(2, ' ')} min wait : #{_print_times(bus_1)} then #{_print_times(bus_2)}"
-          break
-        end
-      end #segments[1] iteration
-    end #segments[0] iteration
+    segments[0].bus_hash.each do |bus_1_trip_id, bus_1_times|
+      _binary_search(bus_1_times[segments[0].drop_off_stop_id], bus_1_times)
+    end
+
+  end
+
+  def _binary_search(bus_1_drop_off_time, bus_1_times)
+    low_index     = 0
+    high_index    = segments[1].trip_ids.length - 1
+
+    while (low_index <= high_index)
+      middle_index       = (high_index + low_index) / 2
+      trip_id_test       = segments[1].trip_ids[middle_index]
+      bus_2_pick_up_time = segments[1].bus_hash[trip_id_test][segments[1].pick_up_stop_id]
+      minute_diff        = _minute_difference(start_time: bus_2_pick_up_time,
+                                              end_time: bus_1_drop_off_time)
+      if _within_desired_wait_time?(minute_diff)
+        results << "#{minute_diff.to_i.to_s.rjust(2, ' ')} min wait : #{_print_times(bus_1_times)} then #{_print_times(segments[1].bus_hash[trip_id_test])}"
+        low_index = high_index + 1
+      elsif bus_2_pick_up_time < bus_1_drop_off_time
+        #process right side
+        low_index = middle_index + 1
+      else
+        #bus_2_pick_up_time > bus_1_drop_off_time
+        #process left side
+        high_index = middle_index - 1
+      end
+
+    end
+
   end
 
   def _print_results

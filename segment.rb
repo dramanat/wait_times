@@ -3,7 +3,7 @@ require './wait_times'
 class Segment
   include Constants
 
-  attr_reader :service_type, :bus_num, :dir, :pick_up_stop_id, :drop_off_stop_id, :bus_hash
+  attr_reader :service_type, :bus_num, :dir, :pick_up_stop_id, :drop_off_stop_id, :bus_hash, :trip_ids
 
   def initialize(svc_type:, bus_number:, bus_dir:, pick_up_id:, drop_off_id:)
     @service_type     = svc_type
@@ -12,6 +12,7 @@ class Segment
     @pick_up_stop_id  = pick_up_id
     @drop_off_stop_id = drop_off_id
     @bus_hash         = {}
+    @trip_ids         = []
   end
 
   def set_up_bus_hash
@@ -31,6 +32,7 @@ class Segment
         if line_dir_id == dir
           invalid_input = false
           bus_hash[line_trip_id] = {}
+          trip_ids << line_trip_id
         end
       end
     }
