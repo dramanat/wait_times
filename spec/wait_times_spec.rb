@@ -1,57 +1,61 @@
-require 'pry'
 require './wait_times'
 require './segment'
 
 describe "wait_times"do
 
-  before(:all) {
-    @seg1 = Segment.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
-                       bus_number: '1',
-                       bus_dir: Constants::OUTBOUND,
-                       pick_up_id: '4029',
-                       drop_off_id: '524'
-                      )
-    @seg1.bus_hash[1] = {}
-    @seg1.bus_hash[2] = {}
-    @seg1.bus_hash[3] = {}
-    @seg1.bus_hash[4] = {}
-    @seg1.bus_hash[1]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17)
-    @seg1.bus_hash[1]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 5)
-    @seg1.bus_hash[2]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 18)
-    @seg1.bus_hash[2]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 18, 5)
-    @seg1.bus_hash[3]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19)
-    @seg1.bus_hash[3]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19, 35)
-    @seg1.bus_hash[4]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20)
-    @seg1.bus_hash[4]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 5)
+  before(:each) {
 
-    @seg1.trip_ids << 1
-    @seg1.trip_ids << 2
-    @seg1.trip_ids << 3
-    @seg1.trip_ids << 4
+    @seg1 = double('Segment',
+                  service_type: Constants::WEEKDAY_SERVICE_ID,
+                  bus_num: '1',
+                  dir: Constants::OUTBOUND,
+                  pick_up_stop_id: '4029',
+                  drop_off_stop_id: '524',
+                 )
 
-    @seg2 = Segment.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
-                       bus_number: '331',
-                       bus_dir: Constants::OUTBOUND,
-                       pick_up_id: '5674',
-                       drop_off_id: '3360'
-                      )
-    @seg2.bus_hash[5] = {}
-    @seg2.bus_hash[6] = {}
-    @seg2.bus_hash[7] = {}
-    @seg2.bus_hash[8] = {}
-    @seg2.bus_hash[5]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 30)
-    @seg2.bus_hash[5]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 35)
-    @seg2.bus_hash[6]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 18, 12)
-    @seg2.bus_hash[6]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 18, 17)
-    @seg2.bus_hash[7]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19, 45)
-    @seg2.bus_hash[7]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19, 50)
-    @seg2.bus_hash[8]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 9)
-    @seg2.bus_hash[8]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 14)
+    seg_1_bus_hash = {}
+    seg_1_bus_hash[1] = {}
+    seg_1_bus_hash[2] = {}
+    seg_1_bus_hash[3] = {}
+    seg_1_bus_hash[4] = {}
+    seg_1_bus_hash[1]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17)
+    seg_1_bus_hash[1]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 5)
+    seg_1_bus_hash[2]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 18)
+    seg_1_bus_hash[2]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 18, 5)
+    seg_1_bus_hash[3]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19)
+    seg_1_bus_hash[3]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19, 35)
+    seg_1_bus_hash[4]['4029'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20)
+    seg_1_bus_hash[4]['524']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 5)
+    allow(@seg1).to receive(:bus_hash) { seg_1_bus_hash }
 
-    @seg2.trip_ids << 5
-    @seg2.trip_ids << 6
-    @seg2.trip_ids << 7
-    @seg2.trip_ids << 8
+    seg_1_trip_ids = [ 1, 2, 3, 4 ]
+    allow(@seg1).to receive(:trip_ids) { seg_1_trip_ids }
+
+    @seg2 = double('Segment',
+                   service_type: Constants::WEEKDAY_SERVICE_ID,
+                   bus_num: '331',
+                   dir: Constants::OUTBOUND,
+                   pick_up_stop_id: '5674',
+                   drop_off_stop_id: '3360',
+                  )
+
+    seg_2_bus_hash = {}
+    seg_2_bus_hash[5] = {}
+    seg_2_bus_hash[6] = {}
+    seg_2_bus_hash[7] = {}
+    seg_2_bus_hash[8] = {}
+    seg_2_bus_hash[5]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 30)
+    seg_2_bus_hash[5]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 17, 35)
+    seg_2_bus_hash[6]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 18, 12)
+    seg_2_bus_hash[6]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 18, 17)
+    seg_2_bus_hash[7]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19, 45)
+    seg_2_bus_hash[7]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 19, 50)
+    seg_2_bus_hash[8]['5674'] = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 9)
+    seg_2_bus_hash[8]['3360']  = Time.utc(Constants::YEAR, Constants::MONTH, Constants::DAY, 20, 14)
+    allow(@seg2).to receive(:bus_hash) { seg_2_bus_hash }
+
+    seg_2_trip_ids = [ 5, 6, 7, 8 ]
+    allow(@seg2).to receive(:trip_ids) { seg_2_trip_ids }
 
     @wt = WaitTimes.new(segments_array: [@seg1, @seg2], want_benchmark: false)
   }
@@ -67,12 +71,13 @@ describe "wait_times"do
 
     context "2 segments received with different service types" do
       it "should fail" do
-        seg3 = Segment.new(svc_type: Constants::SATURDAY_SERVICE_ID,
-                           bus_number: '1',
-                           bus_dir: Constants::OUTBOUND,
-                           pick_up_id: '4029',
-                           drop_off_id: '524'
-                          )
+        seg3 = double('Segment',
+                      service_type: Constants::SATURDAY_SERVICE_ID,
+                      bus_num: '1',
+                      dir: Constants::OUTBOUND,
+                      pick_up_stop_id: '4029',
+                      drop_off_stop_id: '524'
+                     )
         wt2 = WaitTimes.new(segments_array: [seg3, @seg2], want_benchmark: false)
         expect{wt2.send(:_valid_input?)}.to raise_error(RuntimeError)
       end
@@ -80,12 +85,13 @@ describe "wait_times"do
 
     context "2 segments received with same bus number" do
       it "should fail" do
-        seg3 = Segment.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
-                           bus_number: '331',
-                           bus_dir: Constants::OUTBOUND,
-                           pick_up_id: '4029',
-                           drop_off_id: '524'
-                          )
+        seg3 = double('Segment',
+                      service_type: Constants::WEEKDAY_SERVICE_ID,
+                      bus_num: '331',
+                      dir: Constants::OUTBOUND,
+                      pick_up_stop_id: '4029',
+                      drop_off_stop_id: '524'
+                     )
         wt2 = WaitTimes.new(segments_array: [seg3, @seg2], want_benchmark: false)
         expect{wt2.send(:_valid_input?)}.to raise_error(RuntimeError)
       end
@@ -229,12 +235,13 @@ describe "wait_times"do
 
     context "4 digit stop id" do
       it "should not have extra space" do
-        seg3 = Segment.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
-                           bus_number: '1',
-                           bus_dir: Constants::OUTBOUND,
-                           pick_up_id: '4029',
-                           drop_off_id: '4444'
-                          )
+        seg3 = double('Segment',
+                       service_type: Constants::WEEKDAY_SERVICE_ID,
+                       bus_num: '1',
+                       dir: Constants::OUTBOUND,
+                       pick_up_stop_id: '4029',
+                       drop_off_stop_id: '4444'
+                   )
         wt2 = WaitTimes.new(segments_array: [seg3, @seg2], want_benchmark: false)
         output      = wt2.send(:_create_heading)
         output.should == "              4029    -> 4444          5674   -> 3360"
