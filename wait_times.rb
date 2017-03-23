@@ -1,5 +1,7 @@
 require 'pry'
 require 'benchmark'
+require 'active_support/core_ext/hash/indifferent_access'
+require 'json'
 
 module Constants
   WEEKDAY_SERVICE_ID  = '1'
@@ -37,8 +39,7 @@ class WaitTimes
       else
         _find_wait_times
       end
-      puts _create_heading
-      _print_results
+      puts results.to_json
     end
   end
 
@@ -62,7 +63,8 @@ class WaitTimes
       minute_diff        = _minute_difference(start_time: bus_2_pick_up_time,
                                               end_time: bus_1_drop_off_time)
       if _within_desired_wait_time?(minute_diff)
-        results << "#{minute_diff.to_i.to_s.rjust(2, ' ')} min wait : #{_print_times(bus_1_times)} then #{_print_times(segments[1].bus_hash[trip_id_test])}"
+        populate_results(minute_diff: minute_diff, bus_1_times: bus_1_times, trip_id_test: trip_id_test)
+
         low_index = high_index + 1
       elsif bus_2_pick_up_time < bus_1_drop_off_time
         #process right side
@@ -75,6 +77,14 @@ class WaitTimes
 
     end
 
+  end
+
+  def populate_results(minute_diff: ,bus_1_times: , trip_id_test:)
+    hsh = HashWithIndifferentAccess.new
+    hsh[:min_wait] = minute_diff.to_i.to_s
+    hsh[:part_one] = _print_times(bus_1_times)
+    hsh[:part_two] = _print_times(segments[1].bus_hash[trip_id_test])
+    results << hsh
   end
 
   def _print_results
