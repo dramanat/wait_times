@@ -39,7 +39,7 @@ class WaitTimes
       else
         _find_wait_times
       end
-      puts results.to_json
+      puts JSON.pretty_generate(results)
     end
   end
 
