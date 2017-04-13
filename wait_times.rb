@@ -28,7 +28,7 @@ class WaitTimes
     @benchmark_required          = want_benchmark
   end
 
-  def find_and_print
+  def generate_json
     if _valid_input?
       if benchmark_required
         Benchmark.bm(15) do |bench|
@@ -39,7 +39,7 @@ class WaitTimes
       else
         _find_wait_times
       end
-      puts JSON.pretty_generate(results)
+      JSON.pretty_generate(results)
     end
   end
 

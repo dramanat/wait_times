@@ -15,17 +15,17 @@ The following data structure is created :
 - second_bus[trip_id][drop_off_stop_id] = time_at_stop
 
 Bus times are printed when :
-- (second_bus[trip_id][pick_up_stop_id] - first_bus[trip_id][drop_off_stop_id]) **is** greater than 5 **or** less than 15 minutes 
+- (second_bus[trip_id][pick_up_stop_id] - first_bus[trip_id][drop_off_stop_id]) **is** greater than 5 **or** less than 15 minutes
 
 #### Example
 call_wait_times.rb finds bus times with 5-15 minutes wait for :
 - Bus #1 Southbound pick_up_stop_id 4029 and drop_off_stop_id 524, then
 - Bus #331 Westbound pick_up_stop_id 5674 and drop_off_stop_id 3360
 
-[Output from call_wait_times.rb](https://docs.google.com/document/d/1NQLsBa4vuWFes-3ExZfdz8wI9Hxz2UjeOri6NMGopRQ/edit?usp=sharing)
+[Output from call_wait_times.rb](https://drive.google.com/file/d/0B9kCUroHmEyNcEp5bGtidWgwRDA/view?usp=sharing)
 
 #### How to use program
-1. need to have trips.txt & stop_times.txt in wait_times directory 
+1. need to have trips.txt & stop_times.txt in wait_times directory
   1. Austin's Capital Metro GTFS feed can be downloaded from http://www.capmetro.org/gisdata/google_transit.zip
   2. GTFS feeds for other cities can be found at https://code.google.com/archive/p/googletransitdatafeed/wikis/PublicFeeds.wiki
 

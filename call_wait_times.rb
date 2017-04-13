@@ -35,5 +35,4 @@ seg2 = Segment.new(svc_type: Constants::WEEKDAY_SERVICE_ID,
 seg2.set_up_bus_hash
 
 wt3 = WaitTimes.new(segments_array: [seg1, seg2], want_benchmark: true)
-puts "From SOCO (StopID 4029) to Ann Richards School (StopID 3360) using local only"
-wt3.find_and_print
+puts wt3.generate_json
