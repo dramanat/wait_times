@@ -34,11 +34,11 @@ call_wait_times.rb finds bus times with 5-15 minutes wait for :
 3. to print results, use call_wait_times.rb as an example to
   1. set up 2 Segment objects
   2. create WaitTimes object with Segment objects passed in as an array
-  3. execute WaitTimes' find_and_print method
+  3. execute WaitTimes' generate_json method
 
 #### Items to work on
 - [X] create test for #find_wait_times
-- [ ] improve performance of #find_wait_times
+- [X] improve performance of #_find_wait_times
 - [ ] replace file processing with smarter_csv gem (file extensions need to be changed to CSV)
 - [ ] create test files in spec directory and write tests for #create_bus_hash and #populate_bus_hash
 - [X] create Segment class to store bus information (will make program more scalable)
