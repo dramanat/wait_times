@@ -40,5 +40,5 @@ call_wait_times.rb finds bus times with 5-15 minutes wait for :
 - [X] create test for #find_wait_times
 - [X] improve performance of #_find_wait_times
 - [ ] replace file processing with smarter_csv gem (file extensions need to be changed to CSV)
-- [ ] create test files in spec directory and write tests for #create_bus_hash and #populate_bus_hash
+- [X] create test files in spec directory and write tests for #create_bus_hash and #populate_bus_hash
 - [X] create Segment class to store bus information (will make program more scalable)
